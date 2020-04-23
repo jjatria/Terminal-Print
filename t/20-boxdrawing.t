@@ -1,32 +1,10 @@
 use Test;
 
-use Terminal::Print::Widget;
-use Terminal::Print::BoxDrawing;
-use Terminal::ANSIColor;
+use lib 't/lib';
 
-class A is Terminal::Print::Widget does Terminal::Print::BoxDrawing {
-    method TWEAK { self.grid.disable }
+use BoxWidget;
 
-    method border-check($expected, :$color, :$style) {
-        self.draw-box(
-            0, 0, self.w - 1, self.h - 1,
-            |( :$color if $color ),
-            |( :$style if $style )
-        );
-
-        my $cells = self.grid.grid.join;
-        is $cells.&colorstrip, $expected,
-            ( $style || 'default' ) ~ ( $color ?? ' with color' !! '' );
-
-        return unless $color;
-
-        is $cells.&uncolor,
-            ( "$color reset" xx self.w * self.h - 1 ).join(' '),
-            $color;
-    }
-}
-
-my $widget = A.new(x => 0, y => 0, h => 3, w => 3);
+my $widget = BoxWidget.new(x => 0, y => 0, h => 3, w => 3);
 
 for %(
      default => '╔ ═ ╗║   ║╚ ═ ╝',
