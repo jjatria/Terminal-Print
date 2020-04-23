@@ -17,6 +17,22 @@ class Terminal::Print::Widget {
         self.new(:$grid, :w($grid.w), :h($grid.h), :x(0), :y(0), |c);
     }
 
+    method left-of(::?CLASS:D $ref, :$x = 0, :$y = 0, |c) {
+        self.new( x => $ref.x - c<w> - $x, y => $ref.y + $y, |c );
+    }
+
+    method right-of(::?CLASS:D $ref, :$x = 0, :$y = 0, |c) {
+        self.new( x => $ref.x + $ref.w + $x, y => $ref.y + $y, |c );
+    }
+
+    method above(::?CLASS:D $ref, :$x = 0, :$y = 0, |c) {
+        self.new( x => $ref.x + $x, y => $ref.y - c<h> - $y, |c );
+    }
+
+    method below(::?CLASS:D $ref, :$x = 0, :$y = 0, |c) {
+        self.new( x => $ref.x + $x, y => $ref.y + $ref.h + $y, |c );
+    }
+
     #| Replace widget's backing grid, updating widget size to match
     method replace-grid($!grid) {
         $!w = $!grid.w;
